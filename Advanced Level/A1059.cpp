@@ -1,73 +1,55 @@
 #include <cstdio>
-#include <cmath>
 
+using namespace std;
 
 const int maxn = 100000;
-int prime[maxn / 2], pNum = 0;
-bool p[maxn] = { 0 };
+int prime[maxn];
 
-void Find_Prime()
-{
-	for (int i = 2; i < maxn; i++)
-	{
-		if (!p[i])
-		{
-			prime[pNum++] = i;
-			for (int j = i + i; j < maxn; j += i)
-				p[j] = true;
-		}
-	}
+// 鍏堟眰鍑虹礌鏁拌〃
+void Find_Prime() {
+    int p = 0;
+    bool flag[maxn] = {0};
+    // 绛涙硶
+    for(int i = 2; i < maxn; i++) {
+        if(!flag[i]) {
+            prime[p++] = i;
+            for(int j = i + i; j < maxn; j += i)
+                flag[j] = true;
+        }
+    }
 }
 
-struct PrimeFactor
-{
-	int prime;
-	int num;
-} fac[10];
-
-int main()
-{
-	int n;
-	scanf("%d", &n);
-	if (n == 1)
-		printf("1=1");
-	else
-	{
-		// 先求出素数表
-		Find_Prime();
-		printf("%d=", n);
-		int num = 0;
-		// n 若存在 1 和其本身之外的因子，则一定是再 sqrt（n）左右成对出现
-		// 先枚举 sqrt（n）以内的素数 p，判断其中的质因子
-		// 如果 p 不是质因子，则 n 有且只有一个大于 sqrt（n）的质因子（有可能是 n 本身）
-		for (int i = 0; i < pNum && prime[i] <= sqrt(n); i++)
-		{
-			if (n % prime[i] == 0)
-			{
-				fac[num].prime = prime[i];
-				fac[num].num = 0;
-				while (n % prime[i] == 0)
-				{
-					fac[num].num++;
-					n /= fac[num].prime;
-				}
-				num++;
-			}
-			if (n == 1) break;
-		}
-		if (n != 1)
-		{
-			fac[num].prime = n;
-			fac[num++].num = 1;
-		}
-		for (int i = 0; i < num; i++)
-		{
-			if (i > 0)
-				printf("*");
-			printf("%d", fac[i].prime);
-			if (fac[i].num > 1)
-				printf("^%d", fac[i].num);
-		}
-	}
-	return 0;
+int main() {
+    long int num, n;
+    int fac[10] = {0}, exp[10] = {0}, p = 0;  // fac 涓鸿川鍥犲瓙锛宲 涓鸿川鍥犲瓙鎿嶄綔涓嬫爣
+    scanf("%ld", &num);
+    if(num == 1) {  // 1 鍗曠嫭澶勭悊
+        printf("1=1\n");
+        return 0;
+    }
+    Find_Prime();
+    n = num;  // 涔嬪悗瑕佸 n 杩涜鎿嶄綔
+    for(int i = 0; i < maxn && n != 1; i++) {
+        if(n % prime[i] == 0) {
+            fac[p] = prime[i];
+            while(n % prime[i] == 0) {
+                exp[p]++;
+                n /= prime[i];
+            }
+            p++;
+        }
+    }
+    if(n == 1) {
+        printf("%ld=%d", num, fac[0]);
+        if(exp[0] != 1) printf("^%d", exp[0]);
+        for(int i = 1; i < p; i++) {
+            printf("*%d", fac[i]);
+            if(exp[i] != 1) printf("^%d", exp[i]);
+        }
+    } else {
+        // 姝ゆ椂鍙湁鑷繁鏈韩涓�涓川鍥犲瓙
+        printf("%ld=%ld\n", num, num);
+    }
+    return 0;
 }
+

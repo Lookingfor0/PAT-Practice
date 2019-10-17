@@ -1,3 +1,31 @@
+// new method
+#include <cstdio>
+
+#define MAXN 100000
+#define MOD 1000000007
+using namespace std;
+
+int main() {
+    int p = 0, pa = 0, pat = 0;  // p 表示当前以读取的字符中 p 的个数，pa 表示当前读取的字符中 pa 串的个数，pat 以此类推
+    int i = 0;
+    char t;
+    while(scanf("%c", &t) != EOF) {
+        i++;
+        switch(t) {
+            case 'P': p += 1; break;
+            case 'A': pa += p; pa %= MOD; break;
+            case 'T': pat += pa; pat %= MOD; break;
+        }
+    }
+    printf("%d\n", pat);
+    return 0;
+}
+
+
+
+
+// old method
+
 #include <cstdio>
 #include <cstring>
 
