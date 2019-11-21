@@ -1,3 +1,4 @@
+// 注意要先判断是否是连通图
 #include <iostream>
 #include <queue>
 #include <vector>
